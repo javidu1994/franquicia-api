@@ -1,0 +1,21 @@
+pluginManagement {
+    repositories {
+        //mavenLocal()
+        gradlePluginPortal()
+    }
+}
+
+buildCache {
+    local {
+        directory = new File(rootDir, 'build-cache')
+    }
+}
+
+rootProject.name = 'franquicia-api'
+
+include ':app-service'
+include ':model'
+include ':usecase'
+project(':app-service').projectDir = file('./applications/app-service')
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
