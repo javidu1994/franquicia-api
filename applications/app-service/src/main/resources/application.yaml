@@ -1,14 +1,72 @@
-##Spring Configuration
 server:
   port: 8080
 spring:
   application:
-    name: franquicia-api
+    name: "franquicia-api"
   devtools:
     add-properties: false
   h2:
     console:
       enabled: true
-      path: /h2
+      path: "/h2"
   profiles:
-    include:
+    include: null
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,prometheus"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+cors:
+  allowed-origins: "http://localhost:4200,http://localhost:8080"
+springdoc:
+  swagger-ui:
+    path: "/franquicia-api/swagger-ui.html"
+  api-docs:
+    path: "/api/doc/api-docs"
+routes:
+  paths:
+    franquicias: "/api/v1/franquicias"
+    franquicias-by-id: "/{id}"
+    sucursales: "/api/v1/sucursales"
+    sucursales-by-id: "/{id}"
+    productos: "/api/v1/productos"
+    productos-by-id: "/{id}"
+adapters:
+  r2dbc:
+    host: "franquicia-db.cy36a8yqavxq.us-east-1.rds.amazonaws.com"
+    port: 5432
+    database: "franquicia-db"
+    schema: "public"
+    username: "postgres"
+    password: "Gnm7fwShPUYNV5ng0gDD"
+    pool:
+      initial-size: 12
+      max-size: 15
+      max-idle-time: 10
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          reactive: "DEBUG"
+          server: "DEBUG"
+        r2dbc: "DEBUG"
+        data:
+          r2dbc: "DEBUG"
+        security: "DEBUG"
+        oauth2: "DEBUG"
+    io:
+      r2dbc:
+        postgresql:
+          PARAM: "DEBUG"
+        spi: "DEBUG"
+    reactor.netty.http.server: "DEBUG"
+    reactor.netty.http.client: "DEBUG"
+    co:
+      com:
+        accenture:
+          franquicia-api: "DEBUG"

@@ -8,6 +8,7 @@ buildscript {
 		pitestVersion = '1.19.0'
 		pitestHistoryVersion = '0.0.1'
         lombokVersion = '1.18.48'
+        openApiVersion = '2.8.11'
 	}
 }
 
