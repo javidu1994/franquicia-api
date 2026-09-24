@@ -17,7 +17,7 @@ public class ProductoUseCase {
     }
 
     public Mono<Producto> save(Producto producto) {
-        return Mono.empty()
+        return Mono.just(producto)
                 .doOnNext(l -> LOGGER.info("saveProducto con datos: {} " + producto.toString()))
                 .flatMap(f -> productoRepository.save(producto));
     }
@@ -27,4 +27,6 @@ public class ProductoUseCase {
     public Flux<Producto> findAll() {
         return productoRepository.findAll();
     }
+
+    public Mono<Void> delete
 }

@@ -19,7 +19,7 @@ public class FranquiciaRepositoryAdapter
     private static final Logger LOGGER = LoggerFactory.getLogger(FranquiciaRepositoryAdapter.class);
 
     public FranquiciaRepositoryAdapter(FranquiciaReactiveRepository repository, ObjectMapper mapper) {
-        super(repository, mapper, d -> mapper.map(d, Franquicia.class));
+        super(repository, mapper, f -> mapper.map(f, Franquicia.class));
     }
 
     @Override

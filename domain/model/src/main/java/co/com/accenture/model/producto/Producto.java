@@ -48,4 +48,14 @@ public class Producto {
     public void setIdSucursal(Long idSucursal) {
         this.idSucursal = idSucursal;
     }
+
+    @Override
+    public String toString() {
+        return "Producto{" +
+                "idProducto=" + idProducto +
+                ", nombre='" + nombre + '\'' +
+                ", cantidad=" + cantidad +
+                ", idSucursal=" + idSucursal +
+                '}';
+    }
 }

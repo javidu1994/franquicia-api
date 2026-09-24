@@ -37,12 +37,12 @@ routes:
     productos-by-id: "/{id}"
 adapters:
   r2dbc:
-    host: "franquicia-db.cy36a8yqavxq.us-east-1.rds.amazonaws.com"
+    host: "${DB_HOST}"
     port: 5432
-    database: "franquicia-db"
-    schema: "public"
-    username: "postgres"
-    password: "Gnm7fwShPUYNV5ng0gDD"
+    database: "${DB_NAME}"
+    schema: public
+    username: "${DB_USERNAME}"
+    password: "${DB_PASSWORD}"
     pool:
       initial-size: 12
       max-size: 15
@@ -69,4 +69,4 @@ logging:
     co:
       com:
         accenture:
-          franquicia-api: "DEBUG"
+          api: "DEBUG"

@@ -17,7 +17,7 @@ public class SucursalUseCase {
     }
 
     public Mono<Sucursal> save(Sucursal sucursal) {
-        return Mono.empty()
+        return Mono.just(sucursal)
                 .doOnNext(l -> LOGGER.info("saveSucursal con datos: {} " + sucursal.toString()))
                 .flatMap(f -> sucursalRepository.save(sucursal));
     }

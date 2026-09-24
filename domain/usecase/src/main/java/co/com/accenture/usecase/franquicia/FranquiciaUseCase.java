@@ -17,7 +17,7 @@ public class FranquiciaUseCase {
     }
 
     public Mono<Franquicia> save(Franquicia franquicia) {
-        return Mono.empty()
+        return Mono.just(franquicia)
                 .doOnNext(l -> LOGGER.info("saveFranquicia con datos: {} " + franquicia.toString()))
                 .flatMap(f -> franquiciaRepository.save(franquicia));
     }

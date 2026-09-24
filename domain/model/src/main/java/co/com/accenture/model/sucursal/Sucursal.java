@@ -31,11 +31,16 @@ public class Sucursal {
         this.nombre = nombre;
     }
 
-    public Long getIdFranquicia() {
-        return idFranquicia;
-    }
+    public Long getIdFranquicia() { return idFranquicia; }
 
-    public void setIdFranquicia(Long idFranquicia) {
-        this.idFranquicia = idFranquicia;
+    public void setIdFranquicia(Long idFranquicia) { this.idFranquicia = idFranquicia; }
+
+    @Override
+    public String toString() {
+        return "Sucursal{" +
+                "idSucursal=" + idSucursal +
+                ", nombre='" + nombre + '\'' +
+                ", idFranquicia=" + idFranquicia +
+                '}';
     }
 }
