@@ -6,6 +6,9 @@ Proyecto implementado en Java 25, Spring Boot y Spring WebFlux que permite gesti
 
 ![Clean Architecture](https://miro.medium.com/max/1400/1*ZdlHz8B0-qu9Y-QO3AXR_w.png)
 
+# Modelo entidad relacion
+<img width="1165" height="437" alt="image" src="https://github.com/user-attachments/assets/cc21f1b0-cbba-459d-86c9-c4d825878d89" />
+
 # Instrucciones de ejecución
 1. Se debe crear una carpeta en el equipo
 2. Dentro de la carpeta se deben agregar los 2 archivos adjuntos que están en la carpeta **franquicia-app.zip adjunto dentro del correo** llamados **docker-compose.yml** y **.env**
