@@ -27,4 +27,14 @@ public class FranquiciaUseCase {
     public Flux<Franquicia> findAll() {
         return franquiciaRepository.findAll();
     }
+
+    public Mono<Franquicia> update(Long id, String nombre) {
+        return franquiciaRepository.findById(id)
+                .flatMap(f -> {
+                    f.setNombre(nombre);
+                    return Mono.just(f);
+                })
+                .flatMap(franquiciaRepository::save)
+                .doOnSuccess(l -> LOGGER.info("update Franquicia con nombre: " + nombre));
+    }
 }

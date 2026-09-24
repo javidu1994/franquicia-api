@@ -2,6 +2,7 @@ package co.com.accenture.api;
 
 import co.com.accenture.api.dto.FranquiciaDTO;
 import co.com.accenture.api.dto.FranquiciaRequestDTO;
+import co.com.accenture.api.dto.FranquiciaUpdateDTO;
 import co.com.accenture.api.dto.ValidationError;
 import co.com.accenture.api.exception.ValidationException;
 import co.com.accenture.model.franquicia.Franquicia;
@@ -9,6 +10,7 @@ import co.com.accenture.usecase.franquicia.FranquiciaUseCase;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -16,6 +18,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import org.reactivecommons.utils.ObjectMapper;
 
@@ -74,5 +77,19 @@ public class FranquiciaHandler {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_NDJSON)
                 .body(franquiciaUseCase.findAll(), FranquiciaDTO.class);
+    }
+
+    public Mono<ServerResponse> listenPUTUpdate(ServerRequest serverRequest) {
+        String id = serverRequest.pathVariable("id");
+        if (id.isEmpty()) {
+            return Mono.error(new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "El id es requerido!"));
+        }
+
+        return serverRequest.bodyToMono(FranquiciaUpdateDTO.class)
+                .flatMap(r -> franquiciaUseCase.update(Long.parseLong(id), r.getNombre())
+                .then(ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_NDJSON)
+                        .bodyValue("Franquicia actualizada correctamente!")));
     }
 }

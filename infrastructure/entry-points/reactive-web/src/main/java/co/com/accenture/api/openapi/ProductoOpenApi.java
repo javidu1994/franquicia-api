@@ -1,8 +1,6 @@
 package co.com.accenture.api.openapi;
 
-import co.com.accenture.api.dto.ProductoDTO;
-import co.com.accenture.api.dto.ProductoRequestDTO;
-import co.com.accenture.api.dto.ProductoUpdateStockDTO;
+import co.com.accenture.api.dto.*;
 import co.com.accenture.model.producto.dto.ProductoStockMayorDTO;
 import lombok.experimental.UtilityClass;
 import org.springdoc.core.fn.builders.operation.Builder;
@@ -122,6 +120,26 @@ public class ProductoOpenApi {
                         .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
                                 .schema(schemaBuilder().implementation(ProductoStockMayorDTO.class))))
                 .response(responseBuilder().responseCode(INTERNAL_ERROR_CODE).description(INTERNAL_ERROR)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ErrorResponse.class))));
+    }
+
+    public Builder updateProducto(Builder builder) {
+        return builder
+                .operationId("updateProducto")
+                .description("Update Producto")
+                .tag("Producto")
+                .requestBody(requestBodyBuilder()
+                        .required(true)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ProductoUpdateDTO.class))))
+                .response(responseBuilder().responseCode(SUCCESS_CODE).description(SUCCESS)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(String.class))))
+                .response(responseBuilder().responseCode(INTERNAL_ERROR_CODE).description(INTERNAL_ERROR)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ErrorResponse.class))))
+                .response(responseBuilder().responseCode(NOT_FOUND_CODE).description(NOT_FOUND)
                         .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
                                 .schema(schemaBuilder().implementation(ErrorResponse.class))));
     }

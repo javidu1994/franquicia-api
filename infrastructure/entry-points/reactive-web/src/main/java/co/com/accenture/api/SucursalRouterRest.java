@@ -1,6 +1,7 @@
 package co.com.accenture.api;
 
 import co.com.accenture.api.config.SucursalPath;
+import co.com.accenture.api.openapi.FranquiciaOpenApi;
 import co.com.accenture.api.openapi.SucursalOpenApi;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,8 @@ public class SucursalRouterRest {
                 .GET(sucursalPath.getSucursales(), sucursalHandler::listenGETAllSucursales, SucursalOpenApi::getAllSucursales)
                 .GET(sucursalPath.getSucursales() + "/{id}", sucursalHandler::listenGETFindById,
                         SucursalOpenApi::getSucursalById)
+                .PUT(sucursalPath.getSucursales() + "/{id}", sucursalHandler::listenPUTUpdate,
+                        SucursalOpenApi::updateSucursal)
                 .build();
     }
 }

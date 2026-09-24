@@ -27,4 +27,14 @@ public class SucursalUseCase {
     public Flux<Sucursal> findAll() {
         return sucursalRepository.findAll();
     }
+
+    public Mono<Sucursal> update(Long id, String nombre) {
+        return sucursalRepository.findById(id)
+                .flatMap(f -> {
+                    f.setNombre(nombre);
+                    return Mono.just(f);
+                })
+                .flatMap(sucursalRepository::save)
+                .doOnSuccess(l -> LOGGER.info("update Sucursal con nombre: " + nombre));
+    }
 }

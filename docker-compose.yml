@@ -1,0 +1,23 @@
+
+services:
+
+  app:
+
+    build:
+      context: .
+      target: ${STAGE}
+      dockerfile: deployment/Dockerfile
+
+    container_name: franquicia-api
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    environment:
+      STAGE: ${STAGE}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      APP_PORT: ${APP_PORT}
+    env_file:
+      - .env

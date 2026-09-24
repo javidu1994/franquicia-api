@@ -2,6 +2,7 @@ package co.com.accenture.api.openapi;
 
 import co.com.accenture.api.dto.SucursalDTO;
 import co.com.accenture.api.dto.SucursalRequestDTO;
+import co.com.accenture.api.dto.SucursalUpdateDTO;
 import lombok.experimental.UtilityClass;
 import org.springdoc.core.fn.builders.operation.Builder;
 import org.springframework.http.HttpStatus;
@@ -67,6 +68,26 @@ public class SucursalOpenApi {
                 .response(responseBuilder().responseCode(SUCCESS_CODE).description(SUCCESS)
                         .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
                                 .schema(schemaBuilder().implementation(SucursalDTO.class))))
+                .response(responseBuilder().responseCode(INTERNAL_ERROR_CODE).description(INTERNAL_ERROR)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ErrorResponse.class))))
+                .response(responseBuilder().responseCode(NOT_FOUND_CODE).description(NOT_FOUND)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ErrorResponse.class))));
+    }
+
+    public Builder updateSucursal(Builder builder) {
+        return builder
+                .operationId("updateSucursal")
+                .description("Update Sucursal")
+                .tag("Sucursal")
+                .requestBody(requestBodyBuilder()
+                        .required(true)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(SucursalUpdateDTO.class))))
+                .response(responseBuilder().responseCode(SUCCESS_CODE).description(SUCCESS)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(String.class))))
                 .response(responseBuilder().responseCode(INTERNAL_ERROR_CODE).description(INTERNAL_ERROR)
                         .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
                                 .schema(schemaBuilder().implementation(ErrorResponse.class))))

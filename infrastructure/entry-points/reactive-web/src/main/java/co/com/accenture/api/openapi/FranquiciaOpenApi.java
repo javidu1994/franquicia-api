@@ -2,6 +2,8 @@ package co.com.accenture.api.openapi;
 
 import co.com.accenture.api.dto.FranquiciaDTO;
 import co.com.accenture.api.dto.FranquiciaRequestDTO;
+import co.com.accenture.api.dto.FranquiciaUpdateDTO;
+import co.com.accenture.api.dto.ProductoUpdateStockDTO;
 import lombok.experimental.UtilityClass;
 import org.springdoc.core.fn.builders.operation.Builder;
 import org.springframework.http.HttpStatus;
@@ -75,4 +77,23 @@ public class FranquiciaOpenApi {
                                 .schema(schemaBuilder().implementation(ErrorResponse.class))));
     }
 
+    public Builder updateFranquicia(Builder builder) {
+        return builder
+                .operationId("updateFranquicia")
+                .description("Update Franquicia")
+                .tag("Franquicia")
+                .requestBody(requestBodyBuilder()
+                        .required(true)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(FranquiciaUpdateDTO.class))))
+                .response(responseBuilder().responseCode(SUCCESS_CODE).description(SUCCESS)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(String.class))))
+                .response(responseBuilder().responseCode(INTERNAL_ERROR_CODE).description(INTERNAL_ERROR)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ErrorResponse.class))))
+                .response(responseBuilder().responseCode(NOT_FOUND_CODE).description(NOT_FOUND)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ErrorResponse.class))));
+    }
 }

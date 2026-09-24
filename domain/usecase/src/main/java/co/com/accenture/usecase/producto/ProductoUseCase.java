@@ -3,6 +3,7 @@ package co.com.accenture.usecase.producto;
 import co.com.accenture.model.producto.Producto;
 import co.com.accenture.model.producto.dto.ProductoStockMayorDTO;
 import co.com.accenture.model.producto.gateways.ProductoRepository;
+import co.com.accenture.model.sucursal.Sucursal;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -46,5 +47,15 @@ public class ProductoUseCase {
         return productoRepository.getProductosStockMayor(idFranquicia)
                 .doOnNext(l -> LOGGER.info("getProductosStockMayor en la franquicia con id: " + idFranquicia));
 
+    }
+
+    public Mono<Producto> update(Long id, String nombre) {
+        return productoRepository.findById(id)
+                .flatMap(f -> {
+                    f.setNombre(nombre);
+                    return Mono.just(f);
+                })
+                .flatMap(productoRepository::save)
+                .doOnSuccess(l -> LOGGER.info("update Producto con nombre: " + nombre));
     }
 }

@@ -2,80 +2,177 @@ package co.com.accenture.r2dbc;
 
 import co.com.accenture.model.franquicia.Franquicia;
 import co.com.accenture.r2dbc.entity.FranquiciaEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reactivecommons.utils.ObjectMapper;
-import org.springframework.data.domain.Example;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class FranquiciaReactiveRepositoryAdapterTest {
-
-    @InjectMocks
-    FranquiciaRepositoryAdapter repositoryAdapter;
+class FranquiciaRepositoryAdapterTest {
 
     @Mock
-    FranquiciaReactiveRepository repository;
+    private FranquiciaReactiveRepository repository;
 
     @Mock
-    ObjectMapper mapper;
+    private ObjectMapper mapper;
 
-    @Test
-    void mustFindValueById() {
+    @Mock
+    private Franquicia franquicia;
 
-        when(repository.findById(1L)).thenReturn(Mono.just(new FranquiciaEntity(1L, "test")));
-        when(mapper.map(new FranquiciaEntity(1L, "test"), Franquicia.class))
-                .thenReturn(new Franquicia(1L, "test"));
+    @Mock
+    private FranquiciaEntity franquiciaEntity;
 
-        Mono<Franquicia> result = repositoryAdapter.findById(1L);
+    private FranquiciaRepositoryAdapter adapter;
 
-        StepVerifier.create(result)
-                .expectNextMatches(value -> value.equals("test"))
-                .verifyComplete();
+    @BeforeEach
+    void setUp() {
+        adapter = new FranquiciaRepositoryAdapter(repository, mapper);
     }
 
     @Test
-    void mustFindAllValues() {
-        when(repository.findAll()).thenReturn(Flux.just(new FranquiciaEntity(1L, "test")));
-        when(mapper.map("test", Object.class)).thenReturn("test");
+    void shouldSaveFranquicia() {
+        // Arrange
+        when(mapper.map(
+                franquicia,
+                FranquiciaEntity.class
+        )).thenReturn(franquiciaEntity);
 
-        Flux<Franquicia> result = repositoryAdapter.findAll();
+        when(repository.save(franquiciaEntity))
+                .thenReturn(Mono.just(franquiciaEntity));
 
+        when(mapper.map(
+                franquiciaEntity,
+                Franquicia.class
+        )).thenReturn(franquicia);
+
+        // Act
+        Mono<Franquicia> result = adapter.save(franquicia);
+
+        // Assert
         StepVerifier.create(result)
-                .expectNextMatches(value -> value.equals("test"))
+                .expectNext(franquicia)
                 .verifyComplete();
+
+        verify(mapper).map(
+                franquicia,
+                FranquiciaEntity.class
+        );
+
+        verify(repository).save(franquiciaEntity);
+
+        verify(mapper).map(
+                franquiciaEntity,
+                Franquicia.class
+        );
     }
 
     @Test
-    void mustFindByExample() {
-        when(repository.findAll(any(Example.class))).thenReturn(Flux.just("test"));
-        when(mapper.map("test", Object.class)).thenReturn("test");
+    void shouldFindFranquiciaById() {
+        // Arrange
+        Long id = 1L;
 
-        Flux<Franquicia> result = repositoryAdapter.findByExample(new Franquicia(1L, "test"));
+        when(repository.findById(id))
+                .thenReturn(Mono.just(franquiciaEntity));
 
+        when(mapper.map(
+                franquiciaEntity,
+                Franquicia.class
+        )).thenReturn(franquicia);
+
+        // Act
+        Mono<Franquicia> result = adapter.findById(id);
+
+        // Assert
         StepVerifier.create(result)
-                .expectNextMatches(value -> value.equals("test"))
+                .expectNext(franquicia)
                 .verifyComplete();
+
+        verify(repository).findById(id);
+
+        verify(mapper).map(
+                franquiciaEntity,
+                Franquicia.class
+        );
     }
 
     @Test
-    void mustSaveValue() {
-        when(repository.save(new FranquiciaEntity(1L, "test")))
-                .thenReturn(Mono.just(new FranquiciaEntity(1L, "test")));
-        when(mapper.map("test", Object.class)).thenReturn("test");
+    void shouldReturnEmptyWhenFranquiciaDoesNotExist() {
+        // Arrange
+        Long id = 99L;
 
-        Mono<Franquicia> result = repositoryAdapter.save(new Franquicia(1L, "test"));
+        when(repository.findById(id))
+                .thenReturn(Mono.empty());
 
+        // Act
+        Mono<Franquicia> result = adapter.findById(id);
+
+        // Assert
         StepVerifier.create(result)
-                .expectNextMatches(value -> value.equals("test"))
                 .verifyComplete();
+
+        verify(repository).findById(id);
+
+        verify(mapper, never()).map(
+                franquiciaEntity,
+                Franquicia.class
+        );
+    }
+
+    @Test
+    void shouldFindAllFranquicias() {
+        // Arrange
+        FranquiciaEntity entity1 = mock(FranquiciaEntity.class);
+        FranquiciaEntity entity2 = mock(FranquiciaEntity.class);
+
+        Franquicia franquicia1 = mock(Franquicia.class);
+        Franquicia franquicia2 = mock(Franquicia.class);
+
+        when(repository.findAll())
+                .thenReturn(Flux.just(entity1, entity2));
+
+        when(mapper.map(entity1, Franquicia.class))
+                .thenReturn(franquicia1);
+
+        when(mapper.map(entity2, Franquicia.class))
+                .thenReturn(franquicia2);
+
+        // Act
+        Flux<Franquicia> result = adapter.findAll();
+
+        // Assert
+        StepVerifier.create(result)
+                .expectNext(franquicia1)
+                .expectNext(franquicia2)
+                .verifyComplete();
+
+        verify(repository).findAll();
+
+        verify(mapper).map(entity1, Franquicia.class);
+        verify(mapper).map(entity2, Franquicia.class);
+    }
+
+    @Test
+    void shouldReturnEmptyWhenThereAreNoFranquicias() {
+        // Arrange
+        when(repository.findAll())
+                .thenReturn(Flux.empty());
+
+        // Act
+        Flux<Franquicia> result = adapter.findAll();
+
+        // Assert
+        StepVerifier.create(result)
+                .verifyComplete();
+
+        verify(repository).findAll();
+
+        verifyNoInteractions(mapper);
     }
 }

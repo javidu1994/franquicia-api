@@ -2,6 +2,7 @@ package co.com.accenture.api;
 
 import co.com.accenture.api.config.ProductoPath;
 import co.com.accenture.api.openapi.ProductoOpenApi;
+import co.com.accenture.api.openapi.SucursalOpenApi;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.webflux.core.fn.SpringdocRouteBuilder;
@@ -31,6 +32,8 @@ public class ProductoRouterRest {
                         ProductoOpenApi::updateStockProducto)
                 .GET(productoPath.getProductos() + productoPath.getProductosStockMayor(),
                         productoHandler::listenGETProductosStockMayor, ProductoOpenApi::getProductosStockMayor)
+                .PUT(productoPath.getProductos() + "/{id}", productoHandler::listenPUTUpdate,
+                        ProductoOpenApi::updateProducto)
                 .build();
     }
 }

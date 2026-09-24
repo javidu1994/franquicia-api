@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -16,6 +17,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -106,5 +108,19 @@ public class ProductoHandler {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_NDJSON)
                 .body(productoUseCase.getProductosStockMayor(Long.parseLong(idFranquicia)), ProductoStockMayorDTO.class);
+    }
+
+    public Mono<ServerResponse> listenPUTUpdate(ServerRequest serverRequest) {
+        String id = serverRequest.pathVariable("id");
+        if (id.isEmpty()) {
+            return Mono.error(new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "El id es requerido!"));
+        }
+
+        return serverRequest.bodyToMono(FranquiciaUpdateDTO.class)
+                .flatMap(r -> productoUseCase.update(Long.parseLong(id), r.getNombre())
+                        .then(ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_NDJSON)
+                                .bodyValue("Producto actualizado correctamente!")));
     }
 }

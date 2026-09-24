@@ -25,6 +25,8 @@ public class FranquiciaRouterRest {
                 .GET(franquiciaPath.getFranquicias(), franquiciaHandler::listenGETAllFranquicias, FranquiciaOpenApi::getAllFranquicias)
                 .GET(franquiciaPath.getFranquicias() + "/{id}", franquiciaHandler::listenGETFindById,
                         FranquiciaOpenApi::getFranquiciaById)
+                .PUT(franquiciaPath.getFranquicias() + "/{id}", franquiciaHandler::listenPUTUpdate,
+                        FranquiciaOpenApi::updateFranquicia)
                 .build();
     }
 }
