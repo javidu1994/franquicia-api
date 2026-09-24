@@ -8,7 +8,7 @@ Proyecto implementado en Java 25, Spring Boot y Spring WebFlux que permite gesti
 
 # Instrucciones de ejecución
 1. Se debe crear una carpeta en el equipo
-2. Dentro de la carpeta se deben agregar los 2 archivos adjuntos que están en la carpeta **franquicia-app** llamados **docker-compose.yml** y **.env**
+2. Dentro de la carpeta se deben agregar los 2 archivos adjuntos que están en la carpeta **franquicia-app.zip adjunto dentro del correo** llamados **docker-compose.yml** y **.env**
 3. Abrir la terminal o cmd, ubicarse en la ruta de la carpeta y ejecutar el comando: "docker compose up"
 4. Una vez la aplicación haya arrancado abrir la documentación de los endpoints en Swagger OpenApi en la ruta: http://localhost:8080/franquicia-api/swagger-ui/index.html
 5. Usar Postman para la ejecución de los endpoints
@@ -19,7 +19,8 @@ Proyecto implementado en Java 25, Spring Boot y Spring WebFlux que permite gesti
 
 # Consideraciones técnicas relevantes
 1. Framework: se hizo uso del framework Spring Web Flux que permite programación reactiva no bloqueante para los flujos y consultas de datos.
-2. Base de datos Postgresql: se hizo uso de esta base de datos porque esta optimizado y se integra mucho mejor el driver reactivo r2dbc con este motor de base de datos.
+2. Base de datos Postgresql en AWS: se hizo uso de esta base de datos porque esta optimizada y se integra mucho mejor el driver reactivo r2dbc con este motor de base de datos.
+3. Se pueden realizar mejoras para mantener las variables de entorno con aws secrets.
 
 # Endpoints expuestos
 1.	Exponer endpoint para agregar una nueva franquicia **POST http://localhost:8080/api/v1/franquicias/**
