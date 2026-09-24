@@ -1,6 +1,7 @@
 package co.com.accenture.usecase.producto;
 
 import co.com.accenture.model.producto.Producto;
+import co.com.accenture.model.producto.dto.ProductoStockMayorDTO;
 import co.com.accenture.model.producto.gateways.ProductoRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -28,5 +29,22 @@ public class ProductoUseCase {
         return productoRepository.findAll();
     }
 
-    public Mono<Void> delete
+    public Mono<Void> deleteById(Long id) { return productoRepository.deleteById(id); }
+
+    public Mono<Void> updateStockProducto(Long idProducto, Integer cantidad) {
+        return productoRepository.findById(idProducto)
+                .flatMap(p -> {
+                    p.setCantidad(cantidad);
+                    return Mono.just(p);
+                })
+                .flatMap(this::save)
+                .doOnSuccess(l -> LOGGER.info("updateStockProducto con cantidad: " + cantidad))
+                .then(Mono.empty());
+    }
+
+    public Flux<ProductoStockMayorDTO> getProductosStockMayor(Long idFranquicia) {
+        return productoRepository.getProductosStockMayor(idFranquicia)
+                .doOnNext(l -> LOGGER.info("getProductosStockMayor en la franquicia con id: " + idFranquicia));
+
+    }
 }

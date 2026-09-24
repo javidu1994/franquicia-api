@@ -1,6 +1,7 @@
 package co.com.accenture.r2dbc;
 
 import co.com.accenture.model.producto.Producto;
+import co.com.accenture.model.producto.dto.ProductoStockMayorDTO;
 import co.com.accenture.model.producto.gateways.ProductoRepository;
 import co.com.accenture.r2dbc.entity.ProductoEntity;
 import co.com.accenture.r2dbc.helper.ReactiveAdapterOperations;
@@ -39,6 +40,18 @@ public class ProductoRepositoryAdapter
         return super.findAll()
                 .doOnNext(p -> LOGGER.debug("productos retornados: {}", p))
                 .map(p -> p);
+    }
+
+    @Override
+    public Mono<Void> deleteById(Long id) {
+        return super.repository.deleteById(id)
+                .doOnSuccess(p -> LOGGER.debug("Producto eliminado con id: {}", id));
+    }
+
+    @Override
+    public Flux<ProductoStockMayorDTO> getProductosStockMayor(Long idFranquicia) {
+        return super.repository.productosMayorStockSucursal(idFranquicia)
+                .doOnNext(p -> LOGGER.debug("Productos con mayor stock retornados: {}", p));
     }
 
 }

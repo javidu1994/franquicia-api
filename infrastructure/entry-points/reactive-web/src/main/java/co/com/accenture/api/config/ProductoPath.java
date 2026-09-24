@@ -11,5 +11,7 @@ public class ProductoPath {
 
     private String productos;
     private String productosById;
+    private String productosStock;
+    private String productosStockMayor;
 
 }

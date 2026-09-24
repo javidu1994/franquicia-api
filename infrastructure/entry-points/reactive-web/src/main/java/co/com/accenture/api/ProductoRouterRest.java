@@ -25,6 +25,12 @@ public class ProductoRouterRest {
                 .GET(productoPath.getProductos(), productoHandler::listenGETAllProductos, ProductoOpenApi::getAllProductos)
                 .GET(productoPath.getProductos() + "/{id}", productoHandler::listenGETFindById,
                         ProductoOpenApi::getProductoById)
+                .DELETE(productoPath.getProductos() + "/{id}", productoHandler::listenDeleteById,
+                        ProductoOpenApi::deleteProductoById)
+                .PUT(productoPath.getProductos() + productoPath.getProductosStock(), productoHandler::listenUpdateStock,
+                        ProductoOpenApi::updateStockProducto)
+                .GET(productoPath.getProductos() + productoPath.getProductosStockMayor(),
+                        productoHandler::listenGETProductosStockMayor, ProductoOpenApi::getProductosStockMayor)
                 .build();
     }
 }

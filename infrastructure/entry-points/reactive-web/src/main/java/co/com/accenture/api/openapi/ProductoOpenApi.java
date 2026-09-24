@@ -2,6 +2,8 @@ package co.com.accenture.api.openapi;
 
 import co.com.accenture.api.dto.ProductoDTO;
 import co.com.accenture.api.dto.ProductoRequestDTO;
+import co.com.accenture.api.dto.ProductoUpdateStockDTO;
+import co.com.accenture.model.producto.dto.ProductoStockMayorDTO;
 import lombok.experimental.UtilityClass;
 import org.springdoc.core.fn.builders.operation.Builder;
 import org.springframework.http.HttpStatus;
@@ -75,4 +77,52 @@ public class ProductoOpenApi {
                                 .schema(schemaBuilder().implementation(ErrorResponse.class))));
     }
 
+    public Builder deleteProductoById(Builder builder) {
+        return builder
+                .operationId("deleteProductoById")
+                .description("Delete Producto by id")
+                .tag("Producto")
+                .response(responseBuilder().responseCode(SUCCESS_CODE).description(SUCCESS)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(String.class))))
+                .response(responseBuilder().responseCode(INTERNAL_ERROR_CODE).description(INTERNAL_ERROR)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ErrorResponse.class))))
+                .response(responseBuilder().responseCode(NOT_FOUND_CODE).description(NOT_FOUND)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ErrorResponse.class))));
+    }
+
+    public Builder updateStockProducto(Builder builder) {
+        return builder
+                .operationId("updateStockProducto")
+                .description("Update Stock Producto")
+                .tag("Producto")
+                .requestBody(requestBodyBuilder()
+                        .required(true)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ProductoUpdateStockDTO.class))))
+                .response(responseBuilder().responseCode(SUCCESS_CODE).description(SUCCESS)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(String.class))))
+                .response(responseBuilder().responseCode(INTERNAL_ERROR_CODE).description(INTERNAL_ERROR)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ErrorResponse.class))))
+                .response(responseBuilder().responseCode(NOT_FOUND_CODE).description(NOT_FOUND)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ErrorResponse.class))));
+    }
+
+    public Builder getProductosStockMayor(Builder builder) {
+        return builder
+                .operationId("getProductosStockMayor")
+                .description("Obtener productos con mayor stock")
+                .tag("Productos")
+                .response(responseBuilder().responseCode(SUCCESS_CODE).description(SUCCESS)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ProductoStockMayorDTO.class))))
+                .response(responseBuilder().responseCode(INTERNAL_ERROR_CODE).description(INTERNAL_ERROR)
+                        .content(contentBuilder().mediaType(MediaType.APPLICATION_NDJSON_VALUE)
+                                .schema(schemaBuilder().implementation(ErrorResponse.class))));
+    }
 }

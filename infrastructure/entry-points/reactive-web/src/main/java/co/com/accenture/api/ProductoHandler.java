@@ -1,10 +1,9 @@
 package co.com.accenture.api;
 
-import co.com.accenture.api.dto.ProductoDTO;
-import co.com.accenture.api.dto.ProductoRequestDTO;
-import co.com.accenture.api.dto.ValidationError;
+import co.com.accenture.api.dto.*;
 import co.com.accenture.api.exception.ValidationException;
 import co.com.accenture.model.producto.Producto;
+import co.com.accenture.model.producto.dto.ProductoStockMayorDTO;
 import co.com.accenture.usecase.producto.ProductoUseCase;
 import lombok.RequiredArgsConstructor;
 import org.reactivecommons.utils.ObjectMapper;
@@ -74,5 +73,38 @@ public class ProductoHandler {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_NDJSON)
                 .body(productoUseCase.findAll(), ProductoDTO.class);
+    }
+
+    public Mono<ServerResponse> listenDeleteById(ServerRequest serverRequest) {
+        String id = serverRequest.pathVariable("id");
+        if (id.isEmpty()) {
+            return ServerResponse.badRequest()
+                    .bodyValue("El id del producto es requerido");
+        }
+        return productoUseCase.deleteById(Long.parseLong(id))
+                .then(ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_NDJSON)
+                        .bodyValue("Producto eliminado correctamente!"));
+    }
+
+    public Mono<ServerResponse> listenUpdateStock(ServerRequest serverRequest) {
+        return serverRequest.bodyToMono(ProductoUpdateStockDTO.class)
+                .doOnNext(dto -> LOGGER.debug("listenUpdateStock con datos: {} ", dto))
+                .flatMap(dto -> productoUseCase
+                        .updateStockProducto(dto.getIdProducto(), dto.getCantidad()))
+                .then(ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_NDJSON)
+                        .bodyValue("Stock del producto actualizado correctamente!"));
+    }
+
+    public Mono<ServerResponse> listenGETProductosStockMayor(ServerRequest serverRequest) {
+        String idFranquicia = serverRequest.pathVariable("idFranquicia");
+        if (idFranquicia.isEmpty()) {
+            return ServerResponse.badRequest()
+                    .bodyValue("El id de la franquicia es requerido");
+        }
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_NDJSON)
+                .body(productoUseCase.getProductosStockMayor(Long.parseLong(idFranquicia)), ProductoStockMayorDTO.class);
     }
 }

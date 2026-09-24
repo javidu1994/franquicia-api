@@ -35,6 +35,8 @@ routes:
     sucursales-by-id: "/{id}"
     productos: "/api/v1/productos"
     productos-by-id: "/{id}"
+    productos-stock: "/stock"
+    productos-stock-mayor: "/franquicia/{idFranquicia}/stock-mayor"
 adapters:
   r2dbc:
     host: "${DB_HOST}"
